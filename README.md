@@ -5,7 +5,7 @@ Counts word occurrences across multiple text files with parallel processing.
 ## How to Run
 
 ```bash
-dotnet run --project WordCounter.Core
+dotnet run --project WordCounter
 ```
 
 Processes all `.txt` files in the `SampleFiles/` directory.

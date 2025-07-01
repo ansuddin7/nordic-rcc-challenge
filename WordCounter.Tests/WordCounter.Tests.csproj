@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WordCounter.Core\WordCounter.Core.csproj" />
+    <ProjectReference Include="..\WordCounter\WordCounter.csproj" />
   </ItemGroup>
 
 </Project>
