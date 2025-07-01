@@ -1,0 +1,14 @@
+Write a program in C# that:
+Given multiple text files will count the occurrences of each unique word in the files and
+aggregate the results. Processing of the data should be done in a way to minimize running
+time and memory, independent of the number of files or file size.
+
+For example, consider two files:
+File 1: containing the text “Go and do that thing more that you do not so well”
+File 2: containing the text “I do many things very well”
+ 
+Considerations: File size can differ and can be large due to many words on one line or many
+lines in a file. 
+
+Note: You should demonstrate the principles of SOLID, Clean Code and Testability of code
+in your proposed solution.
