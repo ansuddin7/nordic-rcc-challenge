@@ -3,8 +3,10 @@ using WordCounter.Core.Interfaces;
 
 namespace WordCounter.Core.Services;
 
+// Reads files efficiently using streaming to minimize memory usage
 public class FileReader : IFileReader
 {
+    // Streams file content line by line to handle large files without loading everything into memory
     public async IAsyncEnumerable<string> ReadLinesAsync(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))

@@ -2,6 +2,8 @@ using WordCounter.Core.Interfaces;
 
 namespace WordCounter.Core.Services;
 
+// Counts word occurrences from a single file's content
+// Uses regular Dictionary since this processes one file sequentially
 public class WordCounter : IWordCounter
 {
     private readonly IWordParser _wordParser;
@@ -11,6 +13,7 @@ public class WordCounter : IWordCounter
         _wordParser = wordParser ?? throw new ArgumentNullException(nameof(wordParser));
     }
 
+    // Processes lines asynchronously and counts each word occurrence
     public async Task<Dictionary<string, int>> CountWordsAsync(IAsyncEnumerable<string> lines)
     {
         var wordCounts = new Dictionary<string, int>();
@@ -19,6 +22,7 @@ public class WordCounter : IWordCounter
         {
             var words = _wordParser.ParseWords(line);
             
+            // Increment count for each word
             foreach (var word in words)
             {
                 wordCounts[word] = wordCounts.GetValueOrDefault(word, 0) + 1;
