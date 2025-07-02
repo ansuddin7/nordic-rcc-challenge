@@ -1,5 +1,5 @@
-using WordCounter.Core.Interfaces;
-using WordCounter.Core.Services;
+using WordCounter.Interfaces;
+using WordCounter.Services;
 using NSubstitute;
 
 namespace WordCounter.Tests;

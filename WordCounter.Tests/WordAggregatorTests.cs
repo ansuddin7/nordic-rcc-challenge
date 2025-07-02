@@ -1,4 +1,4 @@
-using WordCounter.Core.Services;
+using WordCounter.Services;
 
 namespace WordCounter.Tests;
 

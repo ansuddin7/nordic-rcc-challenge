@@ -1,6 +1,6 @@
-using WordCounter.Core.Interfaces;
+using WordCounter.Interfaces;
 
-namespace WordCounter.Core.Services;
+namespace WordCounter.Services;
 
 // Counts word occurrences from a single file's content
 // Uses regular Dictionary since this processes one file sequentially

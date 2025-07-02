@@ -1,6 +1,6 @@
-using WordCounter.Core.Interfaces;
+using WordCounter.Interfaces;
 
-namespace WordCounter.Core.Services;
+namespace WordCounter.Services;
 
 // Main orchestrator that coordinates all components to process multiple files in parallel
 public class WordCounterService : IWordCounterService

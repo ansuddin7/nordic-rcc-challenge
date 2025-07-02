@@ -1,4 +1,4 @@
-namespace WordCounter.Core.Interfaces;
+namespace WordCounter.Interfaces;
 
 public interface IWordCounter
 {

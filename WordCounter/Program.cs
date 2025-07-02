@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using WordCounter.Core.Interfaces;
-using WordCounter.Core.Services;
+using WordCounter.Interfaces;
+using WordCounter.Services;
 
 var services = new ServiceCollection();
 services.AddTransient<IFileReader, FileReader>();
 services.AddTransient<IWordParser, WordParser>();
-services.AddTransient<IWordCounter, WordCounter.Core.Services.WordCounter>();
+services.AddTransient<IWordCounter, WordCounter.Services.WordCounter>();
 services.AddTransient<IWordAggregator, WordAggregator>();
 services.AddTransient<IWordCounterService, WordCounterService>();
 

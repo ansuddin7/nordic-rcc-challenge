@@ -1,6 +1,6 @@
-using WordCounter.Core.Interfaces;
+using WordCounter.Interfaces;
 
-namespace WordCounter.Core.Services;
+namespace WordCounter.Services;
 
 // Parses words from text using simple string splitting for performance
 public class WordParser : IWordParser

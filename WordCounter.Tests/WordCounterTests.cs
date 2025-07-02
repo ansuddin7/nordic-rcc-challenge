@@ -1,6 +1,6 @@
-using WordCounter.Core.Interfaces;
+using WordCounter.Interfaces;
 using NSubstitute;
-using WordCounterService = WordCounter.Core.Services.WordCounter;
+using WordCounterService = WordCounter.Services.WordCounter;
 
 namespace WordCounter.Tests;
 

@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using WordCounter.Core.Interfaces;
+using WordCounter.Interfaces;
 
-namespace WordCounter.Core.Services;
+namespace WordCounter.Services;
 
 // Aggregates word counts from multiple files using thread-safe operations
 // Uses ConcurrentDictionary to safely merge results from parallel file processing

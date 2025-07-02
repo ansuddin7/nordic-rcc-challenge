@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
-using WordCounter.Core.Interfaces;
+using WordCounter.Interfaces;
 
-namespace WordCounter.Core.Services;
+namespace WordCounter.Services;
 
 // Reads files efficiently using streaming to minimize memory usage
 public class FileReader : IFileReader
