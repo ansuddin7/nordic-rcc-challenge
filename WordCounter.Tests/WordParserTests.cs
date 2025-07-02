@@ -7,66 +7,147 @@ public class WordParserTests
     private readonly WordParser _parser = new();
 
     [Fact]
-    public void ParseWords_SimpleText_ReturnsWords()
+    public async Task ParseWordsAsync_SimpleText_ReturnsCleanWords()
     {
-        var result = _parser.ParseWords("Go and do that thing").ToList();
-        
-        Assert.Equal(new[] { "go", "and", "do", "that", "thing" }, result);
+        var characters = "Hello World".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "hello", "world" }, actualWords);
     }
 
     [Fact]
-    public void ParseWords_TextWithPunctuation_RemovesPunctuation()
+    public async Task ParseWordsAsync_TextWithPunctuation_RemovesPunctuationAndReturnsWords()
     {
-        var result = _parser.ParseWords("Hello, world! How are you?").ToList();
-        
-        Assert.Equal(new[] { "hello", "world", "how", "are", "you" }, result);
+        var characters = "Hello, world! How are you?".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "hello", "world", "how", "are", "you" }, actualWords);
     }
 
     [Fact]
-    public void ParseWords_EmptyString_ReturnsEmpty()
+    public async Task ParseWordsAsync_EmptyInput_ReturnsNoWords()
     {
-        var result = _parser.ParseWords("").ToList();
-        
-        Assert.Empty(result);
+        var characters = "".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Empty(actualWords);
     }
 
     [Fact]
-    public void ParseWords_WhitespaceOnly_ReturnsEmpty()
+    public async Task ParseWordsAsync_OnlyWhitespace_ReturnsNoWords()
     {
-        var result = _parser.ParseWords("   \t\n  ").ToList();
-        
-        Assert.Empty(result);
+        var characters = "   \t\n  \r\n  ".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Empty(actualWords);
     }
 
     [Fact]
-    public void ParseWords_MixedCase_ReturnsLowercase()
+    public async Task ParseWordsAsync_OnlyPunctuation_ReturnsNoWords()
     {
-        var result = _parser.ParseWords("Hello WORLD Test").ToList();
-        
-        Assert.Equal(new[] { "hello", "world", "test" }, result);
+        var characters = "!@#$%^&*()_+-=[]{}|;':\",./<>?".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Empty(actualWords);
     }
 
     [Fact]
-    public void ParseWords_WithBrackets_RemovesBrackets()
+    public async Task ParseWordsAsync_MixedCase_ReturnsLowercaseWords()
     {
-        var result = _parser.ParseWords("word1 [word2] (word3) {word4}").ToList();
-        
-        Assert.Equal(new[] { "word1", "word2", "word3", "word4" }, result);
+        var characters = "HELLO world TeSt".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "hello", "world", "test" }, actualWords);
     }
 
     [Fact]
-    public void ParseWords_WithQuotes_RemovesQuotes()
+    public async Task ParseWordsAsync_NumbersAndLetters_ReturnsWordsWithNumbers()
     {
-        var result = _parser.ParseWords("'hello' \"world\" test").ToList();
-        
-        Assert.Equal(new[] { "hello", "world", "test" }, result);
+        var characters = "test123 456word hello2world".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "test123", "456word", "hello2world" }, actualWords);
     }
 
     [Fact]
-    public void ParseWords_WithNewlines_HandlesCorrectly()
+    public async Task ParseWordsAsync_ComplexPunctuation_HandlesCorrectly()
     {
-        var result = _parser.ParseWords("word1\nword2\r\nword3").ToList();
-        
-        Assert.Equal(new[] { "word1", "word2", "word3" }, result);
+        var characters = "word1 [word2] (word3) {word4} 'word5' \"word6\"".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "word1", "word2", "word3", "word4", "word5", "word6" }, actualWords);
+    }
+
+    [Fact]
+    public async Task ParseWordsAsync_MultilineText_HandlesNewlinesCorrectly()
+    {
+        var characters = "word1\nword2\r\nword3\tword4".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "word1", "word2", "word3", "word4" }, actualWords);
+    }
+
+    [Fact]
+    public async Task ParseWordsAsync_WordsWithMultipleSpaces_HandlesCorrectly()
+    {
+        var characters = "word1    word2\t\t\tword3".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "word1", "word2", "word3" }, actualWords);
+    }
+
+    [Fact]
+    public async Task ParseWordsAsync_EndsWithoutWhitespace_HandlesFinalWord()
+    {
+        var characters = "hello world test".ToAsyncEnumerable();
+
+        var actualWords = new List<string>();
+        await foreach (var word in _parser.ParseWordsAsync(characters))
+            actualWords.Add(word);
+
+        Assert.Equal(new[] { "hello", "world", "test" }, actualWords);
+    }
+}
+
+// Helper extension method for testing
+public static class StringExtensions
+{
+    public static async IAsyncEnumerable<char> ToAsyncEnumerable(this string input)
+    {
+        foreach (char c in input)
+        {
+            await Task.Yield(); // Make it actually async for realistic testing
+            yield return c;
+        }
     }
 }

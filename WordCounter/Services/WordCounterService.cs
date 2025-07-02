@@ -6,15 +6,18 @@ namespace WordCounter.Services;
 public class WordCounterService : IWordCounterService
 {
     private readonly IFileReader _fileReader;
+    private readonly IWordParser _wordParser;
     private readonly IWordCounter _wordCounter;
     private readonly IWordAggregator _wordAggregator;
 
     public WordCounterService(
         IFileReader fileReader, 
+        IWordParser wordParser,
         IWordCounter wordCounter, 
         IWordAggregator wordAggregator)
     {
         _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
+        _wordParser = wordParser ?? throw new ArgumentNullException(nameof(wordParser));
         _wordCounter = wordCounter ?? throw new ArgumentNullException(nameof(wordCounter));
         _wordAggregator = wordAggregator ?? throw new ArgumentNullException(nameof(wordAggregator));
     }
@@ -34,8 +37,9 @@ public class WordCounterService : IWordCounterService
         // Create a task for each file to process them in parallel
         var wordCountTasks = validFilePaths.Select(async filePath =>
         {
-            var lines = _fileReader.ReadLinesAsync(filePath);
-            return await _wordCounter.CountWordsAsync(lines);
+            var characters = _fileReader.ReadCharactersAsync(filePath);
+            var words = _wordParser.ParseWordsAsync(characters);
+            return await _wordCounter.CountWordsAsync(words);
         });
 
         // Aggregate all results
